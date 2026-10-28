@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, readonly) NSString *email;
 
 /// The Google user's full name.
-@property(nonatomic, readonly) NSString *name;
+@property(nonatomic, readonly, nullable) NSString *name;
 
 /// The Google user's given name.
 @property(nonatomic, readonly, nullable) NSString *givenName;

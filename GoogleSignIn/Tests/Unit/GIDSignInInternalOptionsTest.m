@@ -118,7 +118,7 @@ static NSString *const kClaimsAsJSON = @"{\"claim\":\"value\"}";
 }
 
 - (void)testDefaultOptions_withAllParameters_initializesPropertiesCorrectly {
-  NSArray<NSString *> *expectedScopes = @[kScope1, kScope2, @"email", @"profile"];
+  NSArray<NSString *> *expectedScopes = @[kScope1, kScope2, @"openid", @"email"];
 
   GIDSignInInternalOptions *options = [self optionsWithAllParameters];
 

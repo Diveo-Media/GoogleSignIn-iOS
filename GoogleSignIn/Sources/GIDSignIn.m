@@ -1389,11 +1389,10 @@ static void GIDPercentEncodePlusInQuery(NSURLComponents *components) {
 
 // Generates user profile from OIDIDToken.
 - (GIDProfileData *)profileDataWithIDToken:(OIDIDToken *)idToken {
+  // Diveo Media fork: without the "profile" scope the token has no name or picture; the email is
+  // enough, and the userinfo request would not return a name either.
   if (!idToken ||
-      !idToken.claims[kBasicProfilePictureKey] ||
-      !idToken.claims[kBasicProfileNameKey] ||
-      !idToken.claims[kBasicProfileGivenNameKey] ||
-      !idToken.claims[kBasicProfileFamilyNameKey]) {
+      (!idToken.claims[kBasicProfileEmailKey] && !idToken.claims[kBasicProfileNameKey])) {
     return nil;
   }
 

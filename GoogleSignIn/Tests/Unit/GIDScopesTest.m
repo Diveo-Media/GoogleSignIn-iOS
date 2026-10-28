@@ -18,8 +18,8 @@
 #import "GoogleSignIn/Sources/GIDScopes.h"
 
 // Scope constants.
+static NSString *const kOpenID = @"openid";
 static NSString *const kProfile = @"profile";
-static NSString *const kUserinfoProfile = @"https://www.googleapis.com/auth/userinfo.profile";
 static NSString *const kEmail = @"email";
 static NSString *const kUserinfoEmail = @"https://www.googleapis.com/auth/userinfo.email";
 static NSString *const kDriveScope = @"https://www.googleapis.com/auth/drive";
@@ -30,18 +30,22 @@ static NSString *const kDriveScope = @"https://www.googleapis.com/auth/drive";
 @implementation GIDScopesTest
 
 - (void)testScopesWithBasicProfile_NoChange {
-  XCTAssertEqualObjects([GIDScopes scopesWithBasicProfile:(@[ kProfile, kEmail])],
-                        (@[ kProfile, kEmail]));
+  XCTAssertEqualObjects([GIDScopes scopesWithBasicProfile:(@[ kOpenID, kEmail])],
+                        (@[ kOpenID, kEmail]));
 }
 
 - (void)testScopesWithBasicProfile_NoChangeOldScopes {
-  XCTAssertEqualObjects([GIDScopes scopesWithBasicProfile:(@[ kUserinfoProfile, kUserinfoEmail])],
-                        (@[ kUserinfoProfile, kUserinfoEmail]));
+  XCTAssertEqualObjects([GIDScopes scopesWithBasicProfile:(@[ kOpenID, kUserinfoEmail])],
+                        (@[ kOpenID, kUserinfoEmail]));
 }
 
 - (void)testScopesWithBasicProfile_AddScope {
   XCTAssertEqualObjects([GIDScopes scopesWithBasicProfile:(@[ kDriveScope ])],
-                        (@[ kDriveScope, kEmail, kProfile ]));
+                        (@[ kDriveScope, kOpenID, kEmail ]));
+}
+
+- (void)testScopesWithBasicProfile_NoProfileAdded {
+  XCTAssertFalse([[GIDScopes scopesWithBasicProfile:(@[ kDriveScope ])] containsObject:kProfile]);
 }
 
 @end

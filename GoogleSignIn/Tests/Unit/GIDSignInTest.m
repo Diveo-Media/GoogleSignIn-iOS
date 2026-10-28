@@ -720,7 +720,7 @@ static NSString *const kMultipleClaimsJsonString =
                         manualNonce:nil
                              claims:nil];
 
-  expectedScopeString = [@[ @"email", @"profile" ] componentsJoinedByString:@" "];
+  expectedScopeString = [@[ @"openid", @"email" ] componentsJoinedByString:@" "];
   XCTAssertEqualObjects(_savedAuthorizationRequest.scope, expectedScopeString);
 
   [self OAuthLoginWithAddScopesFlow:NO
@@ -738,7 +738,7 @@ static NSString *const kMultipleClaimsJsonString =
                         manualNonce:nil
                              claims:nil];
 
-  expectedScopeString = [@[ kScope, @"email", @"profile" ] componentsJoinedByString:@" "];
+  expectedScopeString = [@[ kScope, @"openid", @"email" ] componentsJoinedByString:@" "];
   XCTAssertEqualObjects(_savedAuthorizationRequest.scope, expectedScopeString);
 
   [self OAuthLoginWithAddScopesFlow:NO
@@ -756,7 +756,7 @@ static NSString *const kMultipleClaimsJsonString =
                         manualNonce:nil
                              claims:nil];
 
-  expectedScopeString = [@[ kScope, kScope2, @"email", @"profile" ] componentsJoinedByString:@" "];
+  expectedScopeString = [@[ kScope, kScope2, @"openid", @"email" ] componentsJoinedByString:@" "];
   XCTAssertEqualObjects(_savedAuthorizationRequest.scope, expectedScopeString);
 }
 

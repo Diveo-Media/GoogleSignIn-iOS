@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Initialize with profile attributes.
 - (instancetype)initWithEmail:(NSString *)email
-                         name:(NSString *)name
+                         name:(nullable NSString *)name
                     givenName:(nullable NSString *)givenName
                    familyName:(nullable NSString *)familyName
                      imageURL:(nullable NSURL *)imageURL;

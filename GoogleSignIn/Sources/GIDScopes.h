@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 // unnecessarily.
 @interface GIDScopes : NSObject
 
-// Adds "email" and "profile" scopes to |scopes| if they are not already contained or implied.
+// Adds "openid" and "email" scopes to |scopes| if they are not already contained or implied.
 + (NSArray *)scopesWithBasicProfile:(NSArray *)scopes;
 
 @end

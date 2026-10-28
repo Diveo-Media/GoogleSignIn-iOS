@@ -16,13 +16,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static NSString *const kOpenIDScope = @"openid";
 static NSString *const kEmailScope = @"email";
 static NSString *const kOldEmailScope = @"https://www.googleapis.com/auth/userinfo.email";
-static NSString *const kProfileScope = @"profile";
-static NSString *const kOldProfileScope = @"https://www.googleapis.com/auth/userinfo.profile";
 
-static BOOL hasProfile(NSString *scope) {
-  return [scope isEqualToString:kProfileScope] || [scope isEqualToString:kOldProfileScope];
+static BOOL hasOpenID(NSString *scope) {
+  return [scope isEqualToString:kOpenIDScope];
 }
 
 static BOOL hasEmail(NSString *scope) {
@@ -56,8 +55,9 @@ static NSArray *addScopeTo(NSArray *originalScopes,
 @implementation GIDScopes
 
 + (NSArray *)scopesWithBasicProfile:(NSArray *)scopes {
-  scopes = addScopeTo(scopes, hasEmail, kEmailScope);
-  return addScopeTo(scopes, hasProfile, kProfileScope);
+  // Diveo Media fork: no "profile" scope, so the consent screen does not ask for the name.
+  scopes = addScopeTo(scopes, hasOpenID, kOpenIDScope);
+  return addScopeTo(scopes, hasEmail, kEmailScope);
 }
 
 @end

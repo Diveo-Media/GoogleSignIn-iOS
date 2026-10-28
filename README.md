@@ -1,3 +1,12 @@
+> [!NOTE]
+> **Diveo Media fork.** Upstream always adds the `profile` scope to a sign-in, so Google's consent
+> screen asks the user to share their name and profile picture. Our apps do not need either, and we do
+> not want to ask for them. This fork requests `openid` and `email` only, and builds the user's
+> `profile` from the email claim of the ID token (`GIDProfileData.name` is `nil`, so it is nullable here).
+>
+> The change lives in `GIDScopes.m` and `-[GIDSignIn profileDataWithIDToken:]`; everything else is
+> upstream. To update, rebase this branch onto the new upstream release tag and run the unit tests.
+
 [![Release](https://img.shields.io/github/v/release/google/GoogleSignIn-iOS?style=flat)](https://github.com/google/GoogleSignIn-iOS/releases)
 [![Swift Package Manager](https://img.shields.io/badge/Swift_Package_Manager-compatible-brightgreen?style=flat)](https://swift.org/package-manager/)
 [![License](https://img.shields.io/github/license/google/GoogleSignIn-iOS?style=flat)](LICENSE)
