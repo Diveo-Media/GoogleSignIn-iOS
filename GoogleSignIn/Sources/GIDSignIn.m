@@ -145,6 +145,8 @@ static NSString *const kOpenIDRealmParameter = @"openid.realm";
 static NSString *const kIncludeGrantedScopesParameter = @"include_granted_scopes";
 static NSString *const kLoginHintParameter = @"login_hint";
 static NSString *const kHostedDomainParameter = @"hd";
+static NSString *const kPromptParameter = @"prompt";
+static NSString *const kPromptParameterConsent = @"consent";
 
 // Parameter for requesting the token claims.
 static NSString *const kClaimsParameter = @"claims";
@@ -958,6 +960,9 @@ static void GIDPercentEncodePlusInQuery(NSURLComponents *components) {
   additionalParameters[kIncludeGrantedScopesParameter] = @"true";
   if (options.configuration.serverClientID) {
     additionalParameters[kAudienceParameter] = options.configuration.serverClientID;
+    // Diveo Media fork: consent every time, so the server auth code always brings a refresh token
+    // the backend can revoke on account deletion, not only on the first consent.
+    additionalParameters[kPromptParameter] = kPromptParameterConsent;
   }
   if (options.loginHint) {
     additionalParameters[kLoginHintParameter] = options.loginHint;

@@ -1088,6 +1088,35 @@ static NSString *const kMultipleClaimsJsonString =
   XCTAssertEqual(params[kOpenIDRealmKey], kOpenIDRealm, @"OpenID Realm should match.");
 }
 
+// Diveo Media fork: with a server client every sign-in asks for consent, so the server auth code
+// brings a refresh token each time, not only on the first consent.
+- (void)testServerClientAsksForConsent {
+  _signIn.configuration = [[GIDConfiguration alloc] initWithClientID:kClientId
+                                                      serverClientID:kServerClientId
+                                                        hostedDomain:nil
+                                                         openIDRealm:nil];
+
+  OCMStub(
+    [_keychainStore saveAuthSession:OCMOCK_ANY error:OCMArg.anyObjectRef]
+  ).andDo(^(NSInvocation *invocation) {
+    self->_keychainSaved = self->_saveAuthorizationReturnValue;
+  });
+
+  [self OAuthLoginWithAddScopesFlow:NO
+                          authError:nil
+                         tokenError:nil
+            emmPasscodeInfoRequired:NO
+               claimsAsJSONRequired:NO
+                      keychainError:NO
+                     restoredSignIn:NO
+                     oldAccessToken:NO
+                        modalCancel:NO];
+
+  NSDictionary<NSString *, NSObject *> *params = _savedAuthorizationRequest.additionalParameters;
+  XCTAssertEqualObjects(params[@"audience"], kServerClientId);
+  XCTAssertEqualObjects(params[@"prompt"], @"consent");
+}
+
 - (void)testManualNonce {
   _signIn.configuration = [[GIDConfiguration alloc] initWithClientID:kClientId
                                                       serverClientID:nil
@@ -2193,6 +2222,8 @@ static NSString *const kMultipleClaimsJsonString =
     XCTAssertNotNil(_savedAuthorizationRequest);
     NSDictionary<NSString *, NSObject *> *params = _savedAuthorizationRequest.additionalParameters;
     XCTAssertEqualObjects(params[@"include_granted_scopes"], @"true");
+    // Diveo Media fork: a server client always asks for consent, so its code brings a refresh token.
+    XCTAssertEqualObjects(params[@"prompt"], params[@"audience"] ? @"consent" : nil);
     XCTAssertEqualObjects(params[kSDKVersionLoggingParameter], [GIDSignInPreferences sdkVersion]);
     XCTAssertEqualObjects(params[kEnvironmentLoggingParameter], [GIDSignInPreferences environment]);
     XCTAssertNotNil(_savedAuthorizationCallback);
